@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberzbin — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="page-wrapper" style="display:flex;flex-direction:column;">
+
+    <!-- ===== Navbar ===== -->
+    <nav class="dash-nav">
+      <div class="dash-logo">
+        <div class="logo-icon">⚡</div>
+        Cyber<span style="color:var(--accent)">zbin</span>
+      </div>
+
+      <div class="nav-links">
+        <button class="nav-link active" onclick="setActiveNav(this)">Dashboard</button>
+        <button class="nav-link"        onclick="setActiveNav(this)">Projects</button>
+        <button class="nav-link"        onclick="setActiveNav(this)">Analytics</button>
+        <button class="nav-link"        onclick="setActiveNav(this)">Settings</button>
+      </div>
+
+      <div class="nav-right">
+        <div class="nav-avatar" id="nav-avatar">CZ</div>
+        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+      </div>
+    </nav>
+
+    <!-- ===== Main Body ===== -->
+    <div class="dash-body">
+
+      <!-- Welcome heading -->
+      <div class="dash-welcome">
+        <h1>Good to see you, <span id="dash-username">User</span> 👋</h1>
+        <p>// <span id="dash-datetime"></span></p>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📁</div>
+          <div class="stat-value counter" data-target="128">0</div>
+          <div class="stat-label">Total Files</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚀</div>
+          <div class="stat-value counter" data-target="47">0</div>
+          <div class="stat-label">Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value counter" data-target="1024">0</div>
+          <div class="stat-label">API Calls</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌐</div>
+          <div class="stat-value counter" data-target="99">0</div>
+          <div class="stat-label">Uptime %</div>
+        </div>
+      </div>
+
+      <!-- Content grid: Activity + Sidebar -->
+      <div class="content-grid">
+
+        <!-- Left column -->
+        <div style="display:flex;flex-direction:column;gap:1.5rem">
+
+          <!-- Activity Feed -->
+          <div class="dash-card">
+            <div class="dash-card-title">
+              Recent Activity
+              <span class="card-badge">Live</span>
+            </div>
+            <ul class="activity-list">
+              <li class="activity-item">
+                <div class="activity-dot" style="background:var(--accent)"></div>
+                <div>
+                  <div class="activity-action">Account created successfully</div>
+                  <div class="activity-time">Just now</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot" style="background:var(--accent2)"></div>
+                <div>
+                  <div class="activity-action">Profile settings initialized</div>
+                  <div class="activity-time">2 minutes ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot" style="background:var(--accent3)"></div>
+                <div>
+                  <div class="activity-action">Security scan completed</div>
+                  <div class="activity-time">5 minutes ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot" style="background:#3b82f6"></div>
+                <div>
+                  <div class="activity-action">API key generated</div>
+                  <div class="activity-time">10 minutes ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot" style="background:var(--accent)"></div>
+                <div>
+                  <div class="activity-action">Dashboard loaded</div>
+                  <div class="activity-time">Just now</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Storage Usage -->
+          <div class="dash-card">
+            <div class="dash-card-title">Storage Usage</div>
+
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Documents</span><span>64%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%;background:var(--accent)" data-width="64"></div>
+              </div>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Images</span><span>38%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%;background:var(--accent2)" data-width="38"></div>
+              </div>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Code Files</span><span>82%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%;background:var(--accent3)" data-width="82"></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /left column -->
+
+        <!-- Right sidebar -->
+        <div style="display:flex;flex-direction:column;gap:1.5rem">
+
+          <!-- Profile Card -->
+          <div class="dash-card profile-card">
+            <div class="profile-avatar" id="dash-avatar">CZ</div>
+            <div class="profile-name"  id="dash-name">CyberUser</div>
+            <div class="profile-email" id="dash-email">user@cyberzbin.com</div>
+            <div class="profile-badge">✓ Verified Member</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <div class="profile-stat-value">12</div>
+                <div class="profile-stat-label">Projects</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-value">48</div>
+                <div class="profile-stat-label">Files</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-value">Pro</div>
+                <div class="profile-stat-label">Plan</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-value">5★</div>
+                <div class="profile-stat-label">Rating</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="dash-card">
+            <div class="dash-card-title">Quick Actions</div>
+            <div class="quick-actions">
+              <button class="quick-btn">
+                <div class="quick-btn-icon">📤</div>
+                <div class="quick-btn-label">Upload</div>
+              </button>
+              <button class="quick-btn">
+                <div class="quick-btn-icon">🗂️</div>
+                <div class="quick-btn-label">New Folder</div>
+              </button>
+              <button class="quick-btn">
+                <div class="quick-btn-icon">🔗</div>
+                <div class="quick-btn-label">Share</div>
+              </button>
+              <button class="quick-btn">
+                <div class="quick-btn-icon">⚙️</div>
+                <div class="quick-btn-label">Settings</div>
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /sidebar -->
+      </div><!-- /.content-grid -->
+    </div><!-- /.dash-body -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- Shared utilities -->
+  <script src="js/main.js"></script>
+
+  <!-- Page-specific logic -->
+  <script>
+    // Guard: redirect to login if no session
+    requireAuth();
+
+    // Load session data
+    const user    = getSession();
+    const initial = (user.username || 'U').charAt(0).toUpperCase();
+
+    // Fill in user info
+    document.getElementById('dash-username').textContent = user.username || 'User';
+    document.getElementById('dash-name').textContent     = user.username || 'User';
+    document.getElementById('dash-email').textContent    = user.email    || '';
+    document.getElementById('dash-avatar').textContent   = initial;
+    document.getElementById('nav-avatar').textContent    = initial;
+
+    // Live clock
+    function updateClock() {
+      document.getElementById('dash-datetime').textContent = new Date().toLocaleString();
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Animated counters
+    document.querySelectorAll('.counter').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      let current  = 0;
+      const step   = Math.ceil(target / 60);
+      const timer  = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current.toLocaleString();
+        if (current >= target) clearInterval(timer);
+      }, 20);
+    });
+
+    // Animated progress bars (after short delay so transition fires)
+    setTimeout(() => {
+      document.querySelectorAll('.progress-fill').forEach(el => {
+        el.style.width = el.dataset.width + '%';
+      });
+    }, 300);
+
+    // Nav link active state
+    function setActiveNav(btn) {
+      document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Logout
+    function handleLogout() {
+      clearSession();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

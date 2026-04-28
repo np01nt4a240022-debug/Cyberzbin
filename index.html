@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--
+  CYBERZBIN — Registration Page
+  File: index.html
+  Description: New user sign-up form with
+               username, email, password & strength meter.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberzbin — Register</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="page-wrapper">
+    <div class="auth-layout">
+      <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="logo">
+          <div class="logo-icon">⚡</div>
+          <div class="logo-text">Cyber<span>zbin</span></div>
+        </div>
+
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-sub">// join the network</p>
+
+        <!-- Alerts -->
+        <div class="alert alert-error" id="reg-error">
+          ⚠ <span id="reg-error-msg"></span>
+        </div>
+        <div class="alert alert-success" id="reg-success">
+          ✓ <span>Account created! Redirecting to login...</span>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label for="reg-username">Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">@</span>
+            <input
+              type="text"
+              id="reg-username"
+              placeholder="your_username"
+              autocomplete="username"
+            >
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input
+              type="email"
+              id="reg-email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            >
+          </div>
+        </div>
+
+        <!-- Password + strength meter -->
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="reg-password"
+              placeholder="Min. 8 characters"
+              autocomplete="new-password"
+              oninput="handleStrength(this)"
+            >
+            <button
+              class="toggle-pw"
+              onclick="togglePw('reg-password', this)"
+              type="button"
+            >👁</button>
+          </div>
+          <!-- Strength bar -->
+          <div class="strength-bar">
+            <div class="strength-seg" id="s1"></div>
+            <div class="strength-seg" id="s2"></div>
+            <div class="strength-seg" id="s3"></div>
+            <div class="strength-seg" id="s4"></div>
+          </div>
+          <div class="strength-label" id="strength-label"></div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="reg-confirm">Confirm Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="reg-confirm"
+              placeholder="Repeat password"
+              autocomplete="new-password"
+            >
+            <button
+              class="toggle-pw"
+              onclick="togglePw('reg-confirm', this)"
+              type="button"
+            >👁</button>
+          </div>
+        </div>
+
+        <!-- Terms checkbox -->
+        <div class="form-group">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="reg-agree">
+            I agree to the
+            <a class="link" style="margin-left:4px">Terms of Service</a>
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <button class="btn-primary" id="reg-btn" onclick="handleRegister()">
+          <span class="btn-text">Create Account</span>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <!-- Footer link -->
+        <div class="auth-footer">
+          Already have an account?
+          <a href="login.html">Sign In</a>
+        </div>
+
+      </div><!-- /.auth-card -->
+    </div><!-- /.auth-layout -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- Shared utilities -->
+  <script src="js/main.js"></script>
+
+  <!-- Page-specific logic -->
+  <script>
+    // Redirect if already logged in
+    redirectIfLoggedIn();
+
+    // Live password strength feedback
+    function handleStrength(input) {
+      const score = getStrength(input.value);
+      applyStrength(score, ['s1','s2','s3','s4'], 'strength-label');
+    }
+
+    // Registration handler
+    async function handleRegister() {
+      const btn = document.getElementById('reg-btn');
+
+      // Clear previous alerts
+      setError('reg-error-msg', 'reg-error', '');
+      showAlert('reg-success', false);
+
+      // Collect values
+      const username = document.getElementById('reg-username').value.trim();
+      const email    = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirm  = document.getElementById('reg-confirm').value;
+      const agreed   = document.getElementById('reg-agree').checked;
+
+      // Validate
+      if (!username)
+        return setError('reg-error-msg', 'reg-error', 'Username is required.');
+      if (!email || !email.includes('@'))
+        return setError('reg-error-msg', 'reg-error', 'Please enter a valid email.');
+      if (password.length < 8)
+        return setError('reg-error-msg', 'reg-error', 'Password must be at least 8 characters.');
+      if (password !== confirm)
+        return setError('reg-error-msg', 'reg-error', 'Passwords do not match.');
+      if (!agreed)
+        return setError('reg-error-msg', 'reg-error', 'You must agree to the Terms of Service.');
+
+      const users = getUsers();
+      if (users.find(u => u.email === email))
+        return setError('reg-error-msg', 'reg-error', 'This email is already registered.');
+
+      // Simulate API call
+      setLoading(btn, true);
+      await delay(1200);
+
+      // Save user
+      users.push({ username, email, password });
+      saveUsers(users);
+
+      setLoading(btn, false);
+      showAlert('reg-success', true);
+
+      // Redirect to login
+      await delay(1500);
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

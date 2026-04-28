@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+  CYBERZBIN — Login Page
+  File: login.html
+  Description: Authenticates users against localStorage,
+               establishes session, redirects to dashboard.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberzbin — Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="page-wrapper">
+    <div class="auth-layout">
+      <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="logo">
+          <div class="logo-icon">⚡</div>
+          <div class="logo-text">Cyber<span>zbin</span></div>
+        </div>
+
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-sub">// authenticate to continue</p>
+
+        <!-- Alerts -->
+        <div class="alert alert-error" id="login-error">
+          ⚠ <span id="login-error-msg"></span>
+        </div>
+        <div class="alert alert-success" id="login-success">
+          ✓ <span>Login successful! Loading dashboard...</span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input
+              type="email"
+              id="login-email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            >
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="login-password"
+              placeholder="Your password"
+              autocomplete="current-password"
+            >
+            <button
+              class="toggle-pw"
+              onclick="togglePw('login-password', this)"
+              type="button"
+            >👁</button>
+          </div>
+          <!-- Forgot password link -->
+          <div class="forgot-link">
+            <a href="forgot-password.html">Forgot password?</a>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="btn-primary" id="login-btn" onclick="handleLogin()">
+          <span class="btn-text">Sign In</span>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <div class="divider">or</div>
+
+        <!-- Footer link -->
+        <div class="auth-footer" style="margin-top: 0">
+          Don't have an account?
+          <a href="index.html">Create one</a>
+        </div>
+
+      </div><!-- /.auth-card -->
+    </div><!-- /.auth-layout -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- Shared utilities -->
+  <script src="js/main.js"></script>
+
+  <!-- Page-specific logic -->
+  <script>
+    // Redirect if already logged in
+    redirectIfLoggedIn();
+
+    async function handleLogin() {
+      const btn = document.getElementById('login-btn');
+
+      // Clear previous alerts
+      setError('login-error-msg', 'login-error', '');
+      showAlert('login-success', false);
+
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      // Validate
+      if (!email)    return setError('login-error-msg', 'login-error', 'Email is required.');
+      if (!password) return setError('login-error-msg', 'login-error', 'Password is required.');
+
+      // Simulate API call
+      setLoading(btn, true);
+      await delay(1000);
+      setLoading(btn, false);
+
+      // Check credentials
+      const users = getUsers();
+      const user  = users.find(u => u.email === email && u.password === password);
+
+      if (!user)
+        return setError('login-error-msg', 'login-error', 'Invalid email or password.');
+
+      // Save session
+      saveSession(user);
+      showAlert('login-success', true);
+
+      await delay(1000);
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>
